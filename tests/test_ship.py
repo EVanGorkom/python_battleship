@@ -8,7 +8,7 @@ class TestShip(unittest.TestCase):
   def test_exists(self):
     self.assertIsInstance(self.cruiser, Ship)
 
-  def has_readable_attributes(self):
+  def test_has_readable_attributes(self):
     self.assertEqual(self.cruiser.name, "Cruiser")
     self.assertEqual(self.cruiser.length, 3)
     self.assertEqual(self.cruiser.health, 3)
