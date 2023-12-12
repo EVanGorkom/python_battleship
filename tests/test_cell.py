@@ -10,7 +10,7 @@ class TestCell(unittest.TestCase):
   def test_exists(self):
     self.assertIsInstance(self.cell, Cell)
 
-  def has_readable_attributes(self):
+  def test_has_readable_attributes(self):
     self.assertEqual(self.cell.coordinate, "B4")
     self.assertIsNone(self.cell.ship)
 
