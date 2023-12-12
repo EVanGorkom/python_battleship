@@ -31,5 +31,5 @@ class TestCell(unittest.TestCase):
 
   def test_fire_upon(self):
     self.cell.place_ship(self.cruiser)
-    self.cell.fire_upon
-    self.assertEqual(self.cell.ship.health, 2) # This line is breaking the test '3 != 2'. So it's not subtracting from the health of the ship when it is fired upon. Pivoting to make ship class tests now.
+    self.cell.fire_upon()
+    self.assertEqual(self.cell.ship.health, 2) 
