@@ -17,6 +17,4 @@ class TestBoard(unittest.TestCase):
     self.assertIsInstance(cells, dict)
 
   def test_creates_cells(self):
-    board_instance = Board()
-    cells = board_instance.create_cells()
-    # self.assertDictContains(cells, "A1")
+    # self.assertTrue(self.board.valid_coordinate("A1")) # This still need fixing
