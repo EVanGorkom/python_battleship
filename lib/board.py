@@ -28,7 +28,7 @@ class Board:
     if len(set(chars_array)) == 1:
       return all(nums_array[i] + 1 == nums_array[i + 1] for i in range(len(nums_array) - 1))
     elif len(set(nums_array)) == 1:
-      return all(ord(chars_array[i] + 1 == chars_array[i + 1] for i in range(len(chars_array) - 1)))
+      return all(ord(chars_array[i]) + 1 == ord(chars_array[i + 1]) for i in range(len(chars_array) - 1))
     else:
       return False
 
