@@ -10,7 +10,7 @@ class Cell:
   def place_ship(self, boat):
     self.ship = boat
 
-  def fired_upon(self):
+  def fired_upon_status(self):
     return self.fired_upon
   
   def fire_upon(self):
@@ -28,3 +28,5 @@ class Cell:
         return "S"
       else:
         return "*"
+    else:
+      return " "
