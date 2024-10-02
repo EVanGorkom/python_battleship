@@ -20,17 +20,18 @@ class Board:
   def valid_placement(self, ship, coordinates):
     if not (isinstance(ship, Ship) and isinstance(coordinates, list) and len(coordinates) == ship.length):
       return False
-    return all(self.valid_coordinate(coor) and self.cells[coor].empty_cell() for coor in coordinates) and self.consecutive(coordinates)
+    if not all(self.valid_coordinate(coor) and self.cells[coor].empty_cell() for coor in coordinates):
+      return False
+    return self.consecutive(coordinates)
 
   def consecutive(self, coordinates):
-    chars_array = [coor[0] for coor in coordinates]
-    nums_array = [int(coor[1]) for coor in coordinates]
-    if len(set(chars_array)) == 1:
-      return all(nums_array[i] + 1 == nums_array[i + 1] for i in range(len(nums_array) - 1))
-    elif len(set(nums_array)) == 1:
-      return all(ord(chars_array[i]) + 1 == ord(chars_array[i + 1]) for i in range(len(chars_array) - 1))
-    else:
-      return False
+    rows = [coor[0] for coor in coordinates]
+    cols = [int(coor[1:]) for coor in coordinates]
+    same_row = all(row == rows[0] for row in rows)
+    same_col = all(col == cols[0] for col in cols)
+    consecutive_in_row = sorted(cols) == list(range(min(cols), max(cols) + 1))
+    consecutive_in_col = sorted([ord(row) for row in rows]) == list(range(ord(min(rows)), ord(max(rows)) + 1))
+    return (same_row and consecutive_in_row) or (same_col and consecutive_in_col)
 
   def place(self, ship, coordinates):
     if self.valid_placement(ship, coordinates):
