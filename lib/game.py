@@ -10,6 +10,7 @@ class Game:
   def __init__(self):
     self.player_board = Board()
     self.computer_board = Board()
+    self.game_over = False
     # self.ships = [Ship("Cruiser", 3), Ship("Submarine", 2), Ship("Battleship", 4)]
 
   def start(self):
@@ -61,6 +62,25 @@ class Game:
       else:  
         print("\n\nWell that wasn't the letter 'p' or 'q' now was it? \nAre you sure you're qualified to operate a vessel of mass destruction soldier? \nTry agin, but watch what you type.")
 
+  def check_game_over(self):
+    if self.player_board.all_ships_sunk():
+      print("All you ships have been sunk!\n")
+      art_folder = os.path.join(os.path.dirname(__file__), 'ascii_art')
+      game_over_file = os.path.join(art_folder, 'game_over.txt')
+      with open(game_over_file, 'r') as file:
+        content = file.read()
+        print(content)
+      self.game_over = True
+
+    elif self.computer_board.all_ships_sunk():
+      print("You've sunk all the computer's ships!\n")
+      art_folder = os.path.join(os.path.dirname(__file__), 'ascii_art')
+      victory_file = os.path.join(art_folder, 'victory.txt')
+      with open(victory_file, 'r') as file:
+        content = file.read()
+        print(content)
+      self.game_over = True
+
   def play(self):
     os.system('clear')
     print("Your opponent has placed their ships. Now it's your turn soldier.")
@@ -69,12 +89,16 @@ class Game:
     self.computer_place_ships()
     self.player_place_ships()
     os.system('clear')
-    while self.game_over == False:
+    
+    while not self.game_over:
       self.player_turn()
-      if self.game_over == True:
+      self.check_game_over()
+      if self.game_over:
         break
+
       self.computer_turn()
-      if self.game_over == True:
+      self.check_game_over()
+      if self.game_over:
         break
 
   def play_again(self):
@@ -118,7 +142,6 @@ class Game:
     times_looped = 0
     if direction == 0:
       for _ in range(ship.length - 1):
-        # pdb.set_trace() 
         letter = starting_coor[0]
         number = int(starting_coor[1]) + 1 + times_looped
         next_coor = f'{letter}{number}'
@@ -132,7 +155,6 @@ class Game:
         next_coor = f'{letter}{number}'
         coordinates.append(next_coor)
         times_looped += 1
-    # print(f"Generated Coordinates for {ship.name}: {coordinates}")
     return coordinates
 
   def generate_random_coordinate(self):
@@ -155,13 +177,21 @@ class Game:
           self.player_board.render(True)
           valid_placement = True 
         else:
-          print("An invalid placement of a ship, soldier. Try again.")
+          print("An invalid placement of a ship, soldier. Try again.\n")
 
   def get_users_coors(self, ship):
-    input(f"Where shall we put our {ship.name} soldier?\nEnter the {ship.length} coordinates you'd like separated with a space. \nEX: a2 b2 or A3 A4\n").upper()
+    while True:
+      user_input = input(f"Where shall we put our {ship.name}, soldier?\nEnter {ship.length} coordinates separated by a space. Example: a2 b2 or A3 A4\n").upper()
+      coordinates = user_input.split()
+      if len(coordinates) == ship.length:
+        return coordinates
+      else:
+        print(f"Invalid input! You need to provide {ship.length} coordinates. Try again.")
 
   def player_turn(self):
+    print("Made it to the player turn")
     return # add code here
   
   def computer_turn(self):
+    print("Made it to the computer turn")
     return # add code here
