@@ -1,3 +1,5 @@
+from lib.ship import Ship
+
 class Cell:
   def __init__(self, coordinate):
     self.coordinate = coordinate
@@ -5,7 +7,8 @@ class Cell:
     self.fired_upon = False
   
   def empty_cell(self):
-    return self.ship is None
+    if self.ship == None:
+      return True
 
   def place_ship(self, boat):
     self.ship = boat
@@ -14,19 +17,17 @@ class Cell:
     return self.fired_upon
   
   def fire_upon(self):
-    if self.ship is not None and not self.fired_upon:
+    if self.ship != None and not self.fired_upon:
       self.ship.hit()
     self.fired_upon = True
 
-  def render(self, reveal_ship=False):
+  def render(self, reveal_ship=True):
     if self.fired_upon:
-      if self.empty():
+      if self.empty_cell():
         return "M"
       elif self.ship.sunk():
         return "X"
-      elif reveal_ship and not self.empty():
+      elif reveal_ship and not self.empty_cell():
         return "S"
-      else:
-        return "*"
     else:
-      return " "
+      return "*"

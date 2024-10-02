@@ -95,7 +95,7 @@ class Game:
         print(". . . . bruh")
         time.sleep(2)
         os.system('clear')
-        print("Your welcome")
+        print("You're welcome")
       elif attempt_count >= 2:
         print("Oh, no thank you. \n'y' or 'n' will work fine.")
       else:
@@ -105,9 +105,9 @@ class Game:
     cruiser = Ship("Cruiser", 3)
     submarine = Ship("Submarine", 2)
     ships = [cruiser, submarine]
-    coordinates = []
     for ship in ships:
-      while self.computer_board.valid_placement(ship, coordinates) == False:
+      coordinates = []
+      while not self.computer_board.valid_placement(ship, coordinates):
         coordinates = self.generate_ship_coors(ship)
       self.computer_board.place(ship, coordinates)
 
@@ -115,20 +115,24 @@ class Game:
     starting_coor = self.generate_random_coordinate()
     direction = random.randint(0, 1)
     coordinates = [starting_coor]
+    times_looped = 0
     if direction == 0:
       for _ in range(ship.length - 1):
         # pdb.set_trace() 
         letter = starting_coor[0]
-        number = int(starting_coor[1]) + 1
+        number = int(starting_coor[1]) + 1 + times_looped
         next_coor = f'{letter}{number}'
         coordinates.append(next_coor)
+        times_looped += 1
     elif direction == 1:
       for _ in range(ship.length - 1):
-        ord_letter = (ord(starting_coor[0]) + 1)
+        ord_letter = (ord(starting_coor[0]) + 1 + times_looped)
         letter = chr(ord_letter)
         number = starting_coor[1]
         next_coor = f'{letter}{number}'
         coordinates.append(next_coor)
+        times_looped += 1
+    # print(f"Generated Coordinates for {ship.name}: {coordinates}")
     return coordinates
 
   def generate_random_coordinate(self):
@@ -139,18 +143,22 @@ class Game:
     cruiser = Ship("Cruiser", 3)
     submarine = Ship("Submarine", 2)
     ships = [cruiser, submarine]
+
     for ship in ships:
-      coordinates = self.get_users_coors(ship)
-      if self.player_board.valid_placement(ship, coordinates):
-        self.player_board.place(ship, coordinates)
-        print("==============Player Board==============\n")
-        self.player_board.render(True)
-        break
-      else:
-        print("An invalid placement of ships captain. Try again.")
+      valid_placement = False
+      while not valid_placement:
+        coordinates = self.get_users_coors(ship)
+        if self.player_board.valid_placement(ship, coordinates):
+          self.player_board.place(ship, coordinates)
+          print(f"\n{ship.name} placed successfully!")
+          print("==============Player Board==============\n")
+          self.player_board.render(True)
+          valid_placement = True 
+        else:
+          print("An invalid placement of a ship, soldier. Try again.")
 
   def get_users_coors(self, ship):
-    input(f"Where shall we put our {ship} soldier?\nEnter {ship.length} coordinates you'd like separated with a space. \nEX: a2 b2 or A3 A4\n").upper()
+    input(f"Where shall we put our {ship.name} soldier?\nEnter the {ship.length} coordinates you'd like separated with a space. \nEX: a2 b2 or A3 A4\n").upper()
 
   def player_turn(self):
     return # add code here
