@@ -7,8 +7,7 @@ class Cell:
     self.fired_upon = False
   
   def empty_cell(self):
-    if self.ship == None:
-      return True
+    return self.ship is None
 
   def place_ship(self, boat):
     self.ship = boat
@@ -30,4 +29,7 @@ class Cell:
       elif reveal_ship and not self.empty_cell():
         return "S"
     else:
-      return "*"
+      if reveal_ship and not self.empty_cell():
+        return "S"
+      else:
+        return "*"
