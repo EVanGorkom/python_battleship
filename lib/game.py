@@ -4,7 +4,6 @@ from lib.ship import Ship
 import random
 import time
 import os
-import pdb
 
 class Game:
   def __init__(self):
@@ -125,6 +124,13 @@ class Game:
       else:
         attempt_count += 1
 
+  def full_board_render(self):
+    print("\n=============Computer Board=============\n")
+    self.computer_board.render(True)
+    # Toggle to False after testing is complete
+    print("\n==============Player Board==============\n")
+    self.player_board.render(True)
+
   def computer_place_ships(self):
     cruiser = Ship("Cruiser", 3)
     submarine = Ship("Submarine", 2)
@@ -189,9 +195,14 @@ class Game:
         print(f"Invalid input! You need to provide {ship.length} coordinates. Try again.")
 
   def player_turn(self):
-    print("Made it to the player turn")
+    time.sleep(0.8)
+    self.full_board_render()
+    coordinate_to_fire = input("\nWhere shall we fire?\n")
+    if self.valid_coordinate(coordinate_to_fire) &&
+
     return # add code here
   
   def computer_turn(self):
+    time.sleep(0.8)
     print("Made it to the computer turn")
     return # add code here
