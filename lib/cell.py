@@ -26,6 +26,8 @@ class Cell:
         return "M"
       elif self.ship.sunk():
         return "X"
+      elif self.ship and self.fired_upon:
+        return "H"
       elif reveal_ship and not self.empty_cell():
         return "S"
     else:

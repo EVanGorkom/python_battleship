@@ -62,6 +62,8 @@ class Game:
         print("\n\nWell that wasn't the letter 'p' or 'q' now was it? \nAre you sure you're qualified to operate a vessel of mass destruction soldier? \nTry agin, but watch what you type.")
 
   def check_game_over(self):
+    print("game over check")
+
     if self.player_board.all_ships_sunk():
       print("All you ships have been sunk!\n")
       art_folder = os.path.join(os.path.dirname(__file__), 'ascii_art')
@@ -82,7 +84,7 @@ class Game:
 
   def play(self):
     os.system('clear')
-    print("Your opponent has placed their ships. Now it's your turn soldier.")
+    print("Your opponent has placed their ships. Now it's your turn.")
     print("==============Player Board==============\n")
     self.player_board.render(True)
     self.computer_place_ships()
@@ -104,11 +106,11 @@ class Game:
     os.system('clear')
     attempt_count = 1
     while True:
-      user_input = input("Do you want to play again?\nPress 'y' for Yes\nPress 'n' for No\n")
-      if user_input.lower() == 'y':
+      user_input = input("Do you want to play again?\nPress 'p' for Play\nPress 'q' for Quit\n")
+      if user_input.lower() == 'p':
         self.play()
         break
-      elif user_input.lower() == 'n':
+      elif user_input.lower() == 'q':
         print("See around soldier!")
         time.sleep(2)
         os.system('clear')
@@ -120,7 +122,7 @@ class Game:
         os.system('clear')
         print("You're welcome")
       elif attempt_count >= 2:
-        print("Oh, no thank you. \n'y' or 'n' will work fine.")
+        print("Oh, no thank you. \n'p' or 'q' will work fine.")
       else:
         attempt_count += 1
 
@@ -182,6 +184,7 @@ class Game:
           print("==============Player Board==============\n")
           self.player_board.render(True)
           valid_placement = True 
+          time.sleep(0.8)
         else:
           print("An invalid placement of a ship, soldier. Try again.\n")
 
@@ -195,14 +198,59 @@ class Game:
         print(f"Invalid input! You need to provide {ship.length} coordinates. Try again.")
 
   def player_turn(self):
+    os.system('clear')
     time.sleep(0.8)
-    self.full_board_render()
-    coordinate_to_fire = input("\nWhere shall we fire?\n")
-    if self.valid_coordinate(coordinate_to_fire) &&
 
-    return # add code here
-  
+    self.full_board_render()
+    coordinate_to_fire = input("\nWhere shall we fire? (Enter any valid coordinate, EX: A1 or b3)\n").upper()
+    if self.computer_board.valid_coordinate(coordinate_to_fire):
+      target_cell = self.computer_board.cells[coordinate_to_fire]
+
+      if target_cell.fired_upon_status():
+        print(f"\nYou've already fired at {coordinate_to_fire}. Try another target soldier.")
+      else:
+        target_cell.fire_upon()
+
+        if target_cell.empty_cell():
+          print(f"\nMiss! {coordinate_to_fire} was empty!")
+        else:
+          if target_cell.ship.sunk():
+            print(f"\nDirect hit! You've sunk the enemy's {target_cell.ship.name}!")
+          else:
+            print(f"\nDirect hit at {coordinate_to_fire}! The enemy's ship has sustained damage.")
+    else:
+      print("\nInvalid coordinate soldier! Try again.")
+      self.player_turn()
+
   def computer_turn(self):
     time.sleep(0.8)
-    print("Made it to the computer turn")
-    return # add code here
+    print("\n\n\n")
+    print("Computer's Turn")
+    print("", end="", flush=True)
+
+    for _ in range(3):
+      time.sleep(0.8)  # Pause between dots
+      print(".  ", end='', flush=True)
+
+    print()  # Move to the next line after the dots
+
+    # Here you can add the logic for the computer's move
+    coordinate_to_fire = self.generate_random_coordinate()
+    print(f"\nComputer fires at {coordinate_to_fire}!")
+
+    target_cell = self.player_board.cells[coordinate_to_fire]
+
+    # Fire upon the chosen coordinate
+    target_cell.fire_upon()
+
+    # Provide feedback for the computer's move
+    if target_cell.empty_cell():
+      print(f"\nMiss! {coordinate_to_fire} was an empty cell.")
+    else:
+      if target_cell.ship.sunk():
+        print(f"\nDirect hit! The computer sunk your {target_cell.ship.name}!")
+      else:
+        print(f"\nDirect hit at {coordinate_to_fire}! One of your ships was damaged.")
+    
+    time.sleep(0.8)
+    time.sleep(0.8)
