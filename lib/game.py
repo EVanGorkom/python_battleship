@@ -62,7 +62,7 @@ class Game:
       elif user_input != 'p' and user_input != 'q' and attempt_count >= 3:
         print("\n\nReally? Try again.")
       else:  
-        print("\n\nWell that wasn't the letter 'p' or 'q' now was it? \nAre you sure you're qualified to operate a vessel of mass destruction soldier? \nTry agin, but watch what you type.")
+        print("\n\nWell that wasn't the letter 'p' or 'q' now was it? \nAre you sure you're qualified to operate a vessel of mass destruction soldier? \nTry again, but watch what you type.")
 
   def check_game_over(self):
     if self.player_board.all_ships_sunk():
@@ -133,7 +133,7 @@ class Game:
 
   def full_board_render(self):
     print("\n=============Computer Board=============\n")
-    self.computer_board.render(True)
+    self.computer_board.render(False)
     # Toggle to False after testing is complete
     print("\n==============Player Board==============\n")
     self.player_board.render(True)
