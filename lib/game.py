@@ -1,6 +1,7 @@
 from lib.board import Board
 from lib.cell import Cell
 from lib.ship import Ship
+import sys
 import random
 import time
 import os
@@ -110,13 +111,21 @@ class Game:
     attempt_count = 1
     while True:
       user_input = input("\nDo you want to play again?\nPress 'p' for Play\nPress 'q' for Quit\n")
+
       if user_input.lower() == 'p':
+        self.player_board = Board()
+        self.computer_board = Board()
+        self.game_over = False
+        self.targeting_mode = False
+        self.targeting_mode_coordinates = []
         self.play()
         break
+
       elif user_input.lower() == 'q':
         print("See around soldier!")
         time.sleep(2)
         os.system('clear')
+        sys.exit()
         break
 
       if attempt_count >= 6:
@@ -124,7 +133,7 @@ class Game:
         time.sleep(2)
         os.system('clear')
         print("You're welcome")
-        break
+        sys.exit()
       elif attempt_count >= 2:
         print("\nOh, no thank you. \n'p' or 'q' will work fine.")
         attempt_count += 1
@@ -270,24 +279,31 @@ class Game:
     letter_ord = ord(letter)
     number = int(coordinate[1])
     
-    # I can add an additional check to make sure I'm not adding the same coordinate to the array more than once. something like `and not adjacent_coordinate in self.targeting_mode_coordinates`
     if number > 1:
       adjacent_coordinate = f"{letter}{number - 1}"
-      if self.player_board.valid_coordinate(adjacent_coordinate) and not self.player_board.cells[adjacent_coordinate].fired_upon:
-        self.targeting_mode_coordinates.append(adjacent_coordinate)
+      if self.player_board.valid_coordinate(adjacent_coordinate) \
+        and not self.player_board.cells[adjacent_coordinate].fired_upon \
+        and not adjacent_coordinate in self.targeting_mode_coordinates:
+          self.targeting_mode_coordinates.append(adjacent_coordinate)
 
     if number < 4:
       adjacent_coordinate = f"{letter}{number + 1}"
-      if self.player_board.valid_coordinate(adjacent_coordinate) and not self.player_board.cells[adjacent_coordinate].fired_upon:
-        self.targeting_mode_coordinates.append(adjacent_coordinate) 
+      if self.player_board.valid_coordinate(adjacent_coordinate) \
+        and not self.player_board.cells[adjacent_coordinate].fired_upon \
+        and not adjacent_coordinate in self.targeting_mode_coordinates:
+          self.targeting_mode_coordinates.append(adjacent_coordinate) 
 
     if letter_ord > 65:
       adjacent_coordinate = f"{chr(letter_ord - 1)}{number}"
-      if self.player_board.valid_coordinate(adjacent_coordinate) and not self.player_board.cells[adjacent_coordinate].fired_upon:
-        self.targeting_mode_coordinates.append(adjacent_coordinate)
+      if self.player_board.valid_coordinate(adjacent_coordinate) \
+        and not self.player_board.cells[adjacent_coordinate].fired_upon \
+        and not adjacent_coordinate in self.targeting_mode_coordinates:
+          self.targeting_mode_coordinates.append(adjacent_coordinate)
 
     if letter_ord < 69:
       adjacent_coordinate = f"{chr(letter_ord + 1)}{number}"
-      if self.player_board.valid_coordinate(adjacent_coordinate) and not self.player_board.cells[adjacent_coordinate].fired_upon:
-        self.targeting_mode_coordinates.append(adjacent_coordinate) 
+      if self.player_board.valid_coordinate(adjacent_coordinate) \
+        and not self.player_board.cells[adjacent_coordinate].fired_upon \
+        and not adjacent_coordinate in self.targeting_mode_coordinates:
+          self.targeting_mode_coordinates.append(adjacent_coordinate) 
 
